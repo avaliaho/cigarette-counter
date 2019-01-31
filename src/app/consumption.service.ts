@@ -36,7 +36,7 @@ export class ConsumptionService {
       let current_exists = false;
       if (consumptions == null) {
         consumptions = [{date: new Date().toLocaleDateString(), 
-          consumption: 0, last_smoked: new Date().toLocaleTimeString()},
+          consumption: 0, last_smoked: new Date().getTime()},
         ]
       }
       for (let consumption of consumptions) {
