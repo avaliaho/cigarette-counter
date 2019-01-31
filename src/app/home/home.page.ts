@@ -40,7 +40,7 @@ export class HomePage {
         this.histories = data;
       }
       this.service.getPack().then((packdata: pack) => {
-        if (packdata != null) {
+        if (packdata != null && data != null) {
           let price_of_one_cigarette = packdata.price / packdata.cigarettecount;
           for (let consumption of data) {
             this.money_consumption += consumption.consumption * price_of_one_cigarette;
