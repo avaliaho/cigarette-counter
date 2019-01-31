@@ -18,6 +18,9 @@ export class HomePage {
   histories: consumption[] = [];
   money_consumption: number = 0;
   money_consumption_tostring: string = "0";
+  timestamp: number = new Date().getTime();
+  timer: any;
+  time_elapsed: string;
 
   ngOnInit() {
 
@@ -25,11 +28,13 @@ export class HomePage {
       if (data == null) {
         this.today.consumption = 0;
         this.today.date = new Date().toLocaleDateString();
-        this.today.last_smoked = new Date().toLocaleTimeString();
+        this.today.last_smoked = new Date().getTime();
+        this.timestamp = new Date().getTime();
       } else {
         for (let consumption of data) {
           if (consumption.date == new Date().toLocaleDateString()) {
             this.today = consumption;
+            this.timestamp = consumption.last_smoked;
           }
         }
         this.histories = data;
@@ -51,12 +56,29 @@ export class HomePage {
       }
     })
 
+    this.timer = setInterval(() => this.setTimeElapsed(), 1000);
+
+  }
+
+  setTimeElapsed = () => {
+    let now = new Date().getTime();
+    let difference = now - this.timestamp;
+
+    let days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 24));
+    let minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+
+    this.time_elapsed = `${days} d ${hours} h ${minutes} m`;
   }
 
   addOne = () => {
     this.today.date = new Date().toLocaleDateString();
     this.today.consumption += 1;
-    this.today.last_smoked = new Date().toLocaleTimeString();
+    this.today.last_smoked = new Date().getTime();
+
+    this.timestamp = new Date().getTime();
+    clearInterval(this.timer);
+    this.timer = setInterval(() => this.setTimeElapsed(), 1000);
 
     this.service.getConsumptions().then((data: consumption[]) => {
       let consumptions = data;
