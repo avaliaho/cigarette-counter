@@ -1,12 +1,56 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+    <ion-segment [(ngModel)]="segment" color="dark">
+      <ion-segment-button value="info">
+        Info
+      </ion-segment-button>
+      <ion-segment-button value="counter">
+        Counter
+      </ion-segment-button>
+      <ion-segment-button value="history">
+        History
+      </ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
+
+  <div *ngIf="segment == 'info'">
+    <h1 class="center">Cigarette pack info</h1>
+    <ion-item>
+      <ion-input placeholder="Price" type="number" [(ngModel)]="pack.price"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input placeholder="Cigarette count" type="number" [(ngModel)]="pack.cigarettecount"></ion-input>
+    </ion-item>
+    <br>
+    <ion-button expand="block" color="dark" (click)="savePack()">Save</ion-button>
+  </div>
+
+  <div *ngIf="segment == 'counter'">
+    <h1 class="center">Consumption today</h1>
+    <p class="center">{{ today.date }}</p>
+    <p class="center">{{ today.consumption }}</p>
+    <p class="center">{{ today.last_smoked }}</p>
+    <ion-button expand="block" color="dark" (click)="addOne()">Add one</ion-button>
+  </div>
+
+  <div *ngIf="segment == 'history'">
+    <h1 class="center">Recent consumption</h1>
+    <ion-grid>
+      <ion-row>
+        <ion-col><b>Date</b></ion-col>
+        <ion-col><b>Consumption</b></ion-col>
+      </ion-row>
+      <ion-row *ngFor="let history of histories">
+        <ion-col>{{ history.date }}</ion-col>
+        <ion-col>{{ history.consumption }}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>-{{ money_consumption_tostring  }} €</ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
 </ion-content>
